@@ -26,27 +26,19 @@ fun SettingsScreen(
     isDark: Boolean,
     language: String,
     streak: ReadingStreakEntity?,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onAdminClick: (() -> Unit)? = null
 ) {
     val bgColors = if (isDark)
         listOf(Color(0xFF1A0A2E), Color(0xFF0D1B2A))
     else
         listOf(Color(0xFF4A0E8F), Color(0xFF7B2FBE))
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Brush.verticalGradient(bgColors))
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
+    Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(bgColors))) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .statusBarsPadding()
+                modifier = Modifier.fillMaxWidth().statusBarsPadding()
                     .padding(horizontal = 8.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -56,14 +48,12 @@ fun SettingsScreen(
                 Text(
                     text = "⚙️ ${if (language == "am") "ቅንብሮች" else "Settings"}",
                     style = MaterialTheme.typography.headlineMedium,
-                    color = EthiopianGold,
-                    fontWeight = FontWeight.Bold
+                    color = EthiopianGold, fontWeight = FontWeight.Bold
                 )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Appearance section
             SettingsSectionHeader(
                 title = if (language == "am") "መልክ" else "Appearance",
                 icon = Icons.Default.Palette
@@ -87,7 +77,6 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Reading stats section
             SettingsSectionHeader(
                 title = if (language == "am") "የማንበቢያ ስታቲስቲክስ" else "Reading Stats",
                 icon = Icons.Default.BarChart
@@ -95,9 +84,7 @@ fun SettingsScreen(
 
             streak?.let { s ->
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
                     border = BorderStroke(1.dp, EthiopianGold.copy(alpha = 0.3f))
@@ -123,16 +110,52 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // About section
+            // Admin section
+            if (onAdminClick != null) {
+                SettingsSectionHeader(
+                    title = if (language == "am") "አስተዳዳሪ" else "Admin",
+                    icon = Icons.Default.AdminPanelSettings
+                )
+                Card(
+                    onClick = onAdminClick,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
+                    border = BorderStroke(1.dp, EthiopianGold.copy(alpha = 0.2f))
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(Icons.Default.Lock, contentDescription = null, tint = EthiopianGold,
+                            modifier = Modifier.size(24.dp))
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = if (language == "am") "Admin Panel" else "Admin Panel",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium),
+                                color = Color.White
+                            )
+                            Text(
+                                text = if (language == "am") "ይዘቶችን ያስተዳድሩ" else "Manage content",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.White.copy(alpha = 0.6f)
+                            )
+                        }
+                        Icon(Icons.Default.ChevronRight, contentDescription = null,
+                            tint = Color.White.copy(alpha = 0.4f))
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
             SettingsSectionHeader(
                 title = if (language == "am") "ስለ መተግበሪያው" else "About",
                 icon = Icons.Default.Info
             )
 
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 4.dp),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
                 border = BorderStroke(1.dp, EthiopianGold.copy(alpha = 0.3f))
@@ -146,8 +169,7 @@ fun SettingsScreen(
                     Text(
                         text = if (language == "am") "የኢትዮጵያ ሥነ ጽሑፍ" else "Ethiopian Literature",
                         style = MaterialTheme.typography.titleLarge,
-                        color = EthiopianGold,
-                        fontWeight = FontWeight.Bold
+                        color = EthiopianGold, fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = "Version 1.0.0",
@@ -175,42 +197,29 @@ fun SettingsScreen(
 @Composable
 fun SettingsSectionHeader(title: String, icon: ImageVector) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 8.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(icon, contentDescription = null, tint = EthiopianGold, modifier = Modifier.size(20.dp))
         Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            color = EthiopianGold,
-            fontWeight = FontWeight.Bold
-        )
+        Text(text = title, style = MaterialTheme.typography.titleMedium,
+            color = EthiopianGold, fontWeight = FontWeight.Bold)
     }
 }
 
 @Composable
 fun SettingsToggleItem(
-    title: String,
-    subtitle: String,
-    icon: ImageVector,
-    checked: Boolean,
-    onToggle: () -> Unit
+    title: String, subtitle: String, icon: ImageVector,
+    checked: Boolean, onToggle: () -> Unit
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
         border = BorderStroke(1.dp, EthiopianGold.copy(alpha = 0.2f))
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -218,13 +227,15 @@ fun SettingsToggleItem(
                 Icon(icon, contentDescription = null, tint = EthiopianGold, modifier = Modifier.size(24.dp))
                 Spacer(modifier = Modifier.width(12.dp))
                 Column {
-                    Text(text = title, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium), color = Color.White)
-                    Text(text = subtitle, style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = 0.6f))
+                    Text(text = title,
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium),
+                        color = Color.White)
+                    Text(text = subtitle, style = MaterialTheme.typography.bodySmall,
+                        color = Color.White.copy(alpha = 0.6f))
                 }
             }
             Switch(
-                checked = checked,
-                onCheckedChange = { onToggle() },
+                checked = checked, onCheckedChange = { onToggle() },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color(0xFF1A0A2E),
                     checkedTrackColor = EthiopianGold
@@ -241,7 +252,10 @@ fun StatRow(label: String, value: String) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = label, style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.8f))
-        Text(text = value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = EthiopianGold)
+        Text(text = label, style = MaterialTheme.typography.bodyMedium,
+            color = Color.White.copy(alpha = 0.8f))
+        Text(text = value,
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+            color = EthiopianGold)
     }
 }

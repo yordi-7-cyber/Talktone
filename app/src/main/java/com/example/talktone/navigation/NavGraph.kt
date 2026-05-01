@@ -19,4 +19,6 @@ sealed class Screen(val route: String) {
         fun createRoute(id: Int) = "read_book/$id"
     }
     object Settings : Screen("settings")
+    object AdminLogin : Screen("admin_login")
+    object AdminDashboard : Screen("admin_dashboard")
 }

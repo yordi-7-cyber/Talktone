@@ -51,10 +51,8 @@ fun AppNavHost(
 ) {
     val navController = rememberNavController()
 
-    NavHost(
-        navController = navController,
-        startDestination = Screen.Splash.route
-    ) {
+    NavHost(navController = navController, startDestination = Screen.Splash.route) {
+
         composable(Screen.Splash.route) {
             SplashScreen(onFinished = {
                 navController.navigate(Screen.Home.route) {
@@ -65,11 +63,8 @@ fun AppNavHost(
 
         composable(Screen.Home.route) {
             HomeScreen(
-                viewModel = viewModel,
-                isDark = isDark,
-                language = language,
-                streak = streak,
-                showCongrats = showCongrats,
+                viewModel = viewModel, isDark = isDark, language = language,
+                streak = streak, showCongrats = showCongrats,
                 onNavigate = { route -> navController.navigate(route) }
             )
         }
@@ -78,130 +73,109 @@ fun AppNavHost(
             LiteratureListScreen(
                 items = AmharicContent.poems,
                 category = com.example.talktone.data.LiteratureCategory.POEM,
-                language = language,
-                isDark = isDark,
+                language = language, isDark = isDark,
                 onBack = { navController.popBackStack() },
                 onItemClick = { id -> navController.navigate(Screen.PoemDetail.createRoute(id)) }
             )
         }
 
-        composable(
-            route = Screen.PoemDetail.route,
+        composable(Screen.PoemDetail.route,
             arguments = listOf(navArgument("itemId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("itemId") ?: return@composable
+        ) { back ->
+            val id = back.arguments?.getInt("itemId") ?: return@composable
             val item = AmharicContent.poems.find { it.id == id } ?: return@composable
-            LiteratureDetailScreen(
-                item = item,
-                language = language,
-                isDark = isDark,
-                onBack = { navController.popBackStack() }
-            )
+            LiteratureDetailScreen(item = item, language = language, isDark = isDark,
+                onBack = { navController.popBackStack() })
         }
 
         composable(Screen.Terets.route) {
             LiteratureListScreen(
                 items = AmharicContent.terets,
                 category = com.example.talktone.data.LiteratureCategory.TERET,
-                language = language,
-                isDark = isDark,
+                language = language, isDark = isDark,
                 onBack = { navController.popBackStack() },
                 onItemClick = { id -> navController.navigate(Screen.TeretDetail.createRoute(id)) }
             )
         }
 
-        composable(
-            route = Screen.TeretDetail.route,
+        composable(Screen.TeretDetail.route,
             arguments = listOf(navArgument("itemId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("itemId") ?: return@composable
+        ) { back ->
+            val id = back.arguments?.getInt("itemId") ?: return@composable
             val item = AmharicContent.terets.find { it.id == id } ?: return@composable
-            LiteratureDetailScreen(
-                item = item,
-                language = language,
-                isDark = isDark,
-                onBack = { navController.popBackStack() }
-            )
+            LiteratureDetailScreen(item = item, language = language, isDark = isDark,
+                onBack = { navController.popBackStack() })
         }
 
         composable(Screen.Misale.route) {
             LiteratureListScreen(
                 items = AmharicContent.misaleoch,
                 category = com.example.talktone.data.LiteratureCategory.MISALE,
-                language = language,
-                isDark = isDark,
+                language = language, isDark = isDark,
                 onBack = { navController.popBackStack() },
-                onItemClick = { id ->
-                    val item = AmharicContent.misaleoch.find { it.id == id }
-                    item?.let {
-                        navController.navigate("misale_detail/$id")
-                    }
-                }
+                onItemClick = { id -> navController.navigate("misale_detail/$id") }
             )
         }
 
-        composable(
-            route = "misale_detail/{itemId}",
+        composable("misale_detail/{itemId}",
             arguments = listOf(navArgument("itemId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("itemId") ?: return@composable
+        ) { back ->
+            val id = back.arguments?.getInt("itemId") ?: return@composable
             val item = AmharicContent.misaleoch.find { it.id == id } ?: return@composable
-            LiteratureDetailScreen(
-                item = item,
-                language = language,
-                isDark = isDark,
-                onBack = { navController.popBackStack() }
-            )
+            LiteratureDetailScreen(item = item, language = language, isDark = isDark,
+                onBack = { navController.popBackStack() })
         }
 
         composable(Screen.Quiz.route) {
-            QuizScreen(
-                viewModel = viewModel,
-                language = language,
-                isDark = isDark,
-                onBack = { navController.popBackStack() }
-            )
+            QuizScreen(viewModel = viewModel, language = language, isDark = isDark,
+                onBack = { navController.popBackStack() })
         }
 
         composable(Screen.Quotes.route) {
-            QuotesScreen(
-                viewModel = viewModel,
-                language = language,
-                isDark = isDark,
-                onBack = { navController.popBackStack() }
-            )
+            QuotesScreen(viewModel = viewModel, language = language, isDark = isDark,
+                onBack = { navController.popBackStack() })
         }
 
         composable(Screen.BookReader.route) {
             BookReaderScreen(
-                viewModel = viewModel,
-                language = language,
-                isDark = isDark,
+                viewModel = viewModel, language = language, isDark = isDark,
                 onBack = { navController.popBackStack() },
                 onOpenBook = { id -> navController.navigate(Screen.ReadBook.createRoute(id)) }
             )
         }
 
-        composable(
-            route = Screen.ReadBook.route,
+        composable(Screen.ReadBook.route,
             arguments = listOf(navArgument("bookId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val bookId = backStackEntry.arguments?.getInt("bookId") ?: return@composable
-            ReadBookScreen(
-                bookId = bookId,
-                viewModel = viewModel,
-                language = language,
-                isDark = isDark,
-                onBack = { navController.popBackStack() }
-            )
+        ) { back ->
+            val bookId = back.arguments?.getInt("bookId") ?: return@composable
+            ReadBookScreen(bookId = bookId, viewModel = viewModel, language = language,
+                isDark = isDark, onBack = { navController.popBackStack() })
         }
 
         composable(Screen.Settings.route) {
             SettingsScreen(
-                viewModel = viewModel,
-                isDark = isDark,
-                language = language,
-                streak = streak,
+                viewModel = viewModel, isDark = isDark, language = language,
+                streak = streak, onBack = { navController.popBackStack() },
+                onAdminClick = { navController.navigate(Screen.AdminLogin.route) }
+            )
+        }
+
+        // ── Admin ──────────────────────────────────────────────────────────────
+        composable(Screen.AdminLogin.route) {
+            AdminLoginScreen(
+                viewModel = viewModel, isDark = isDark,
+                onLoginSuccess = {
+                    navController.navigate(Screen.AdminDashboard.route) {
+                        popUpTo(Screen.AdminLogin.route) { inclusive = true }
+                    }
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.AdminDashboard.route) {
+            AdminDashboardScreen(
+                viewModel = viewModel, isDark = isDark,
                 onBack = { navController.popBackStack() }
             )
         }

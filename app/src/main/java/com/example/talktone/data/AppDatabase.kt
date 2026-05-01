@@ -6,14 +6,28 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [BookEntity::class, BookmarkEntity::class, ReadingStreakEntity::class],
-    version = 1,
+    entities = [
+        BookEntity::class,
+        BookmarkEntity::class,
+        ReadingStreakEntity::class,
+        AdminPoem::class,
+        AdminTeret::class,
+        AdminMisale::class,
+        AdminQuiz::class,
+        AdminQuote::class
+    ],
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun bookDao(): BookDao
     abstract fun bookmarkDao(): BookmarkDao
     abstract fun streakDao(): ReadingStreakDao
+    abstract fun adminPoemDao(): AdminPoemDao
+    abstract fun adminTeretDao(): AdminTeretDao
+    abstract fun adminMisaleDao(): AdminMisaleDao
+    abstract fun adminQuizDao(): AdminQuizDao
+    abstract fun adminQuoteDao(): AdminQuoteDao
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null
@@ -24,7 +38,9 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "amharic_lit_db"
-                ).build().also { INSTANCE = it }
+                )
+                .fallbackToDestructiveMigration()
+                .build().also { INSTANCE = it }
             }
     }
 }
