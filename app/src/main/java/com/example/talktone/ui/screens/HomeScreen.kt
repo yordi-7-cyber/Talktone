@@ -13,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.talktone.data.LiteratureCategory
 import com.example.talktone.data.ReadingStreakEntity
+import com.example.talktone.data.UserProfile
 import com.example.talktone.ui.theme.*
 import com.example.talktone.viewmodel.AppViewModel
 
@@ -32,7 +34,6 @@ data class CategoryCard(
     val route: String
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: AppViewModel,
@@ -40,111 +41,75 @@ fun HomeScreen(
     language: String,
     streak: ReadingStreakEntity?,
     showCongrats: Boolean,
+    userProfile: UserProfile?,
     onNavigate: (String) -> Unit
 ) {
     val categories = listOf(
-        CategoryCard(LiteratureCategory.POEM, listOf(Color(0xFF6A0DAD), Color(0xFF9B59B6)), "poems"),
-        CategoryCard(LiteratureCategory.TERET, listOf(Color(0xFF8B4513), Color(0xFFD2691E)), "terets"),
+        CategoryCard(LiteratureCategory.POEM,   listOf(Color(0xFF6A0DAD), Color(0xFF9B59B6)), "poems"),
+        CategoryCard(LiteratureCategory.TERET,  listOf(Color(0xFF8B4513), Color(0xFFD2691E)), "terets"),
         CategoryCard(LiteratureCategory.MISALE, listOf(Color(0xFF006400), Color(0xFF228B22)), "misale"),
-        CategoryCard(LiteratureCategory.QUIZ, listOf(Color(0xFF8B0000), Color(0xFFDC143C)), "quiz"),
-        CategoryCard(LiteratureCategory.BOOKS, listOf(Color(0xFF00008B), Color(0xFF4169E1)), "book_reader"),
+        CategoryCard(LiteratureCategory.NOVEL,  listOf(Color(0xFF1A237E), Color(0xFF3949AB)), "novels"),
+        CategoryCard(LiteratureCategory.QUIZ,   listOf(Color(0xFF8B0000), Color(0xFFDC143C)), "quiz"),
+        CategoryCard(LiteratureCategory.BOOKS,  listOf(Color(0xFF00008B), Color(0xFF4169E1)), "book_reader"),
         CategoryCard(LiteratureCategory.QUOTES, listOf(Color(0xFF8B6914), Color(0xFFD4AF37)), "quotes"),
+        CategoryCard(LiteratureCategory.PODCAST,listOf(Color(0xFF880E4F), Color(0xFFE91E63)), "podcast"),
+        CategoryCard(LiteratureCategory.COMMUNITY, listOf(Color(0xFF004D40), Color(0xFF00897B)), "community_feed"),
     )
 
-    val infiniteTransition = rememberInfiniteTransition(label = "home_bg")
+    val infiniteTransition = rememberInfiniteTransition(label = "bg")
     val bgAnim by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(6000, easing = LinearEasing), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(8000, easing = LinearEasing), RepeatMode.Reverse),
         label = "bg_anim"
     )
 
     if (showCongrats) {
-        CongratsDialog(
-            streak = streak?.currentStreak ?: 7,
-            language = language,
-            onDismiss = { viewModel.dismissCongrats() }
-        )
+        CongratsDialog(streak = streak?.currentStreak ?: 7, language = language,
+            onDismiss = { viewModel.dismissCongrats() })
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    if (isDark) listOf(Color(0xFF1A0A2E), Color(0xFF0D1B2A), Color(0xFF16213E))
-                    else listOf(Color(0xFF4A0E8F), Color(0xFF7B2FBE), Color(0xFF9B59B6))
-                )
-            )
-    ) {
-        // Animated background orbs
-        Box(
-            modifier = Modifier
-                .size(300.dp)
-                .offset(x = (-50).dp, y = (-50 + bgAnim * 30).dp)
-                .graphicsLayer { alpha = 0.15f }
-                .background(
-                    Brush.radialGradient(listOf(EthiopianGold, Color.Transparent)),
-                    CircleShape
-                )
-        )
-        Box(
-            modifier = Modifier
-                .size(200.dp)
-                .align(Alignment.BottomEnd)
-                .offset(x = 50.dp, y = (50 - bgAnim * 20).dp)
-                .graphicsLayer { alpha = 0.1f }
-                .background(
-                    Brush.radialGradient(listOf(EthiopianGreen, Color.Transparent)),
-                    CircleShape
-                )
-        )
+    val bgColors = if (isDark)
+        listOf(Color(0xFF0D0221), Color(0xFF1A0A2E), Color(0xFF0D1B2A))
+    else
+        listOf(Color(0xFF1A0050), Color(0xFF4A0E8F), Color(0xFF7B2FBE))
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
+    Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(bgColors))) {
+        // Animated orbs
+        Box(modifier = Modifier.size(350.dp).offset((-80).dp, (-80 + bgAnim * 40).dp)
+            .graphicsLayer { alpha = 0.12f }
+            .background(Brush.radialGradient(listOf(EthiopianGold, Color.Transparent)), CircleShape))
+        Box(modifier = Modifier.size(250.dp).align(Alignment.BottomEnd).offset(80.dp, (80 - bgAnim * 30).dp)
+            .graphicsLayer { alpha = 0.1f }
+            .background(Brush.radialGradient(listOf(EthiopianGreen, Color.Transparent)), CircleShape))
+
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
             // Top bar
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .statusBarsPadding()
-                    .padding(horizontal = 20.dp, vertical = 12.dp),
+                modifier = Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 20.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
                     Text(
-                        text = if (language == "am") "ሰላም 👋" else "Hello 👋",
+                        text = if (language == "am") "ሰላም${if (userProfile?.name?.isNotEmpty() == true) ", ${userProfile.name}" else ""} 👋"
+                               else "Hello${if (userProfile?.name?.isNotEmpty() == true) ", ${userProfile.name}" else ""} 👋",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White.copy(alpha = 0.8f)
+                        color = Color.White.copy(0.8f)
                     )
-                    Text(
-                        text = if (language == "am") "የኢትዮጵያ ሥነ ጽሑፍ" else "Ethiopian Literature",
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = EthiopianGold,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Text("ብዕር", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = EthiopianGold)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    // Language toggle
-                    TextButton(
-                        onClick = { viewModel.setLanguage(if (language == "am") "en" else "am") },
-                        colors = ButtonDefaults.textButtonColors(contentColor = Color.White)
-                    ) {
-                        Text(if (language == "am") "EN" else "አማ", style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold))
+                    TextButton(onClick = { viewModel.setLanguage(if (language == "am") "en" else "am") },
+                        colors = ButtonDefaults.textButtonColors(contentColor = Color.White)) {
+                        Text(if (language == "am") "EN" else "አማ",
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold))
                     }
-                    // Dark mode toggle
                     IconButton(onClick = { viewModel.toggleDarkMode() }) {
-                        Icon(
-                            if (isDark) Icons.Default.LightMode else Icons.Default.DarkMode,
-                            contentDescription = "Toggle theme",
-                            tint = EthiopianGold
-                        )
+                        Icon(if (isDark) Icons.Default.LightMode else Icons.Default.DarkMode,
+                            null, tint = EthiopianGold)
                     }
-                    // Settings
                     IconButton(onClick = { onNavigate("settings") }) {
-                        Icon(Icons.Default.Settings, contentDescription = "Settings", tint = Color.White)
+                        Icon(Icons.Default.Settings, null, tint = Color.White)
                     }
                 }
             }
@@ -152,10 +117,67 @@ fun HomeScreen(
             // Streak card
             streak?.let { s ->
                 StreakCard(streak = s, language = language, modifier = Modifier.padding(horizontal = 20.dp))
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(Modifier.height(20.dp))
             }
 
-            // Section title
+            // Beginner shortcut
+            if (userProfile?.level == "beginner") {
+                Card(
+                    onClick = { onNavigate("beginner_learn") },
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+                ) {
+                    Box(modifier = Modifier.fillMaxWidth().background(
+                        Brush.linearGradient(listOf(Color(0xFF1A237E), Color(0xFF4A148C))),
+                        RoundedCornerShape(16.dp)
+                    ).padding(16.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("📚", fontSize = 32.sp)
+                            Spacer(Modifier.width(12.dp))
+                            Column {
+                                Text(if (language == "am") "ፊደላት ይማሩ" else "Learn Alphabet",
+                                    color = EthiopianGold, fontWeight = FontWeight.Bold)
+                                Text(if (language == "am") "ሀ ሁ ሂ — ቁጥሮች — ቃላት" else "ሀ ሁ ሂ — Numbers — Words",
+                                    color = Color.White.copy(0.7f), fontSize = 13.sp)
+                            }
+                            Spacer(Modifier.weight(1f))
+                            Icon(Icons.Default.ArrowForward, null, tint = EthiopianGold)
+                        }
+                    }
+                }
+                Spacer(Modifier.height(16.dp))
+            }
+
+            // Creator shortcut
+            if (userProfile?.role == "creator") {
+                Card(
+                    onClick = { onNavigate("creator_submit") },
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+                ) {
+                    Box(modifier = Modifier.fillMaxWidth().background(
+                        Brush.linearGradient(listOf(Color(0xFF004D40), Color(0xFF1B5E20))),
+                        RoundedCornerShape(16.dp)
+                    ).padding(16.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("✍️", fontSize = 32.sp)
+                            Spacer(Modifier.width(12.dp))
+                            Column {
+                                Text(if (language == "am") "ስራ አስገባ" else "Submit Work",
+                                    color = EthiopianGold, fontWeight = FontWeight.Bold)
+                                Text(if (language == "am") "ፈጠራ ስራዎን ያጋሩ" else "Share your creative work",
+                                    color = Color.White.copy(0.7f), fontSize = 13.sp)
+                            }
+                            Spacer(Modifier.weight(1f))
+                            Icon(Icons.Default.ArrowForward, null, tint = EthiopianGold)
+                        }
+                    }
+                }
+                Spacer(Modifier.height(16.dp))
+            }
+
             Text(
                 text = if (language == "am") "ምድቦች" else "Categories",
                 style = MaterialTheme.typography.titleLarge,
@@ -163,32 +185,21 @@ fun HomeScreen(
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
             )
 
-            // Categories grid
             LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(500.dp)
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                columns = GridCells.Fixed(3),
+                modifier = Modifier.fillMaxWidth().height(if (categories.size <= 6) 340.dp else 520.dp).padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
                 userScrollEnabled = false
             ) {
                 items(categories) { card ->
-                    CategoryCardItem(
-                        card = card,
-                        language = language,
-                        onClick = { onNavigate(card.route) }
-                    )
+                    CategoryCardItem(card = card, language = language, onClick = { onNavigate(card.route) })
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Daily quote teaser
+            Spacer(Modifier.height(20.dp))
             DailyQuoteTeaser(language = language, onClick = { onNavigate("quotes") })
-
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(Modifier.height(32.dp))
         }
     }
 }
@@ -197,40 +208,22 @@ fun HomeScreen(
 fun CategoryCardItem(card: CategoryCard, language: String, onClick: () -> Unit) {
     Card(
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(130.dp)
-            .shadow(8.dp, RoundedCornerShape(20.dp)),
-        shape = RoundedCornerShape(20.dp),
+        modifier = Modifier.fillMaxWidth().height(110.dp).shadow(6.dp, RoundedCornerShape(18.dp)),
+        shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Brush.linearGradient(card.gradient)),
-            contentAlignment = Alignment.Center
-        ) {
-            // Decorative circle
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .align(Alignment.TopEnd)
-                    .offset(x = 20.dp, y = (-20).dp)
-                    .graphicsLayer { alpha = 0.2f }
-                    .background(Color.White, CircleShape)
-            )
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(text = card.category.emoji, fontSize = 36.sp)
-                Spacer(modifier = Modifier.height(8.dp))
+        Box(modifier = Modifier.fillMaxSize().background(Brush.linearGradient(card.gradient)),
+            contentAlignment = Alignment.Center) {
+            Box(modifier = Modifier.size(70.dp).align(Alignment.TopEnd).offset(18.dp, (-18).dp)
+                .graphicsLayer { alpha = 0.18f }.background(Color.White, CircleShape))
+            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                Text(card.category.emoji, fontSize = 28.sp)
+                Spacer(Modifier.height(6.dp))
                 Text(
-                    text = if (language == "am") card.category.labelAm else card.category.labelEn,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
+                    if (language == "am") card.category.labelAm else card.category.labelEn,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = Color.White, fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center, maxLines = 2
                 )
             }
         }
@@ -239,58 +232,26 @@ fun CategoryCardItem(card: CategoryCard, language: String, onClick: () -> Unit) 
 
 @Composable
 fun StreakCard(streak: ReadingStreakEntity, language: String, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    Brush.linearGradient(listOf(Color(0xFFD4AF37), Color(0xFF8B6914)))
-                )
-                .padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+    Card(modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent)) {
+        Box(modifier = Modifier.fillMaxWidth()
+            .background(Brush.linearGradient(listOf(Color(0xFFD4AF37), Color(0xFF8B6914))))
+            .padding(16.dp)) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically) {
                 Column {
-                    Text(
-                        text = if (language == "am") "🔥 የማንበቢያ ቀናት" else "🔥 Reading Streak",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color(0xFF1A0A2E),
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = if (language == "am") "${streak.currentStreak} ቀናት ተከታታይ"
-                        else "${streak.currentStreak} days in a row",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color(0xFF2A1A0E)
-                    )
+                    Text(if (language == "am") "🔥 የማንበቢያ ቀናት" else "🔥 Reading Streak",
+                        style = MaterialTheme.typography.titleMedium, color = Color(0xFF1A0A2E), fontWeight = FontWeight.Bold)
+                    Text(if (language == "am") "${streak.currentStreak} ቀናት ተከታታይ" else "${streak.currentStreak} days in a row",
+                        style = MaterialTheme.typography.bodyMedium, color = Color(0xFF2A1A0E))
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "${streak.currentStreak}",
-                        style = MaterialTheme.typography.displayMedium,
-                        color = Color(0xFF1A0A2E),
-                        fontWeight = FontWeight.Bold
-                    )
-                    // Streak dots
+                    Text("${streak.currentStreak}", style = MaterialTheme.typography.displayMedium,
+                        color = Color(0xFF1A0A2E), fontWeight = FontWeight.Bold)
                     Row {
                         repeat(7) { i ->
-                            Box(
-                                modifier = Modifier
-                                    .size(10.dp)
-                                    .padding(1.dp)
-                                    .background(
-                                        if (i < streak.currentStreak % 8) Color(0xFF1A0A2E)
-                                        else Color(0xFF1A0A2E).copy(alpha = 0.3f),
-                                        CircleShape
-                                    )
-                            )
+                            Box(modifier = Modifier.size(10.dp).padding(1.dp).background(
+                                if (i < streak.currentStreak % 8) Color(0xFF1A0A2E) else Color(0xFF1A0A2E).copy(0.3f), CircleShape))
                         }
                     }
                 }
@@ -301,46 +262,25 @@ fun StreakCard(streak: ReadingStreakEntity, language: String, modifier: Modifier
 
 @Composable
 fun DailyQuoteTeaser(language: String, onClick: () -> Unit) {
-    Card(
-        onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    Brush.linearGradient(listOf(Color(0xFF1A0A2E), Color(0xFF2D1B69)))
-                )
-                .padding(20.dp)
-        ) {
+    Card(onClick = onClick, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+        shape = RoundedCornerShape(20.dp), colors = CardDefaults.cardColors(containerColor = Color.Transparent)) {
+        Box(modifier = Modifier.fillMaxWidth()
+            .background(Brush.linearGradient(listOf(Color(0xFF1A0A2E), Color(0xFF2D1B69))))
+            .padding(20.dp)) {
             Column {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("✨", fontSize = 20.sp)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = if (language == "am") "የዛሬ ጥቅስ" else "Quote of the Day",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = EthiopianGold,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(if (language == "am") "የዛሬ ጥቅስ" else "Quote of the Day",
+                        style = MaterialTheme.typography.titleMedium, color = EthiopianGold, fontWeight = FontWeight.Bold)
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = if (language == "am") "\"አንብቦ ያደገ ሰው ዓለምን ያሸንፋል\""
-                    else "\"One who grows through reading conquers the world\"",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = Color.White.copy(alpha = 0.9f)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = if (language == "am") "ሁሉንም ጥቅሶች ይመልከቱ →" else "See all quotes →",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = EthiopianGold.copy(alpha = 0.8f)
-                )
+                Spacer(Modifier.height(8.dp))
+                Text(if (language == "am") "\"አንብቦ ያደገ ሰው ዓለምን ያሸንፋል\""
+                     else "\"One who grows through reading conquers the world\"",
+                    style = MaterialTheme.typography.bodyLarge, color = Color.White.copy(0.9f))
+                Spacer(Modifier.height(8.dp))
+                Text(if (language == "am") "ሁሉንም ጥቅሶች ይመልከቱ →" else "See all quotes →",
+                    style = MaterialTheme.typography.labelLarge, color = EthiopianGold.copy(0.8f))
             }
         }
     }
@@ -352,39 +292,20 @@ fun CongratsDialog(streak: Int, language: String, onDismiss: () -> Unit) {
         onDismissRequest = onDismiss,
         containerColor = Color(0xFF1A0A2E),
         title = {
-            Text(
-                text = "🎉 ብራቮ! 🎉",
-                style = MaterialTheme.typography.headlineMedium,
-                color = EthiopianGold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Text("🎉 ብራቮ! 🎉", style = MaterialTheme.typography.headlineMedium,
+                color = EthiopianGold, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
         },
         text = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = if (language == "am")
-                        "ዋው! $streak ቀናት ተከታታይ አንብበሃል!\nማንበብ ሕይወትን ይቀይራል!\nቀጥል! 💪"
-                    else
-                        "Wow! $streak days in a row!\nReading changes life!\nKeep it up! 💪",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = Color.White,
-                    textAlign = TextAlign.Center
-                )
+                Text(if (language == "am") "ዋው! $streak ቀናት ተከታታይ አንብበሃል!\nቀጥል! 💪"
+                     else "Wow! $streak days in a row!\nKeep it up! 💪",
+                    style = MaterialTheme.typography.bodyLarge, color = Color.White, textAlign = TextAlign.Center)
             }
         },
         confirmButton = {
-            Button(
-                onClick = onDismiss,
-                colors = ButtonDefaults.buttonColors(containerColor = EthiopianGold)
-            ) {
-                Text(
-                    if (language == "am") "አመሰግናለሁ!" else "Thank you!",
-                    color = Color(0xFF1A0A2E)
-                )
+            Button(onClick = onDismiss, colors = ButtonDefaults.buttonColors(containerColor = EthiopianGold)) {
+                Text(if (language == "am") "አመሰግናለሁ!" else "Thank you!", color = Color(0xFF1A0A2E))
             }
         }
     )
 }
-
-

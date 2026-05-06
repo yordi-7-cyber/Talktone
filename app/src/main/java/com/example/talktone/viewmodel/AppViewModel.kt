@@ -16,33 +16,32 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     val isDarkMode: StateFlow<Boolean> = prefs.isDarkMode
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
-
     val language: StateFlow<String> = prefs.language
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "am")
+    val isOnboarded: StateFlow<Boolean> = prefs.isOnboarded
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
+    val userProfile: StateFlow<UserProfile?> = db.userProfileDao().getProfile()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     val books: StateFlow<List<BookEntity>> = db.bookDao().getAllBooks()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
-
     val streak: StateFlow<ReadingStreakEntity?> = db.streakDao().getStreak()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
-    // Quiz state
+    // Quiz
     private val _currentQuizIndex = MutableStateFlow(0)
     val currentQuizIndex: StateFlow<Int> = _currentQuizIndex
-
     private val _quizScore = MutableStateFlow(0)
     val quizScore: StateFlow<Int> = _quizScore
-
-    private val _selectedAnswer = MutableStateFlow<Int?>( null)
+    private val _selectedAnswer = MutableStateFlow<Int?>(null)
     val selectedAnswer: StateFlow<Int?> = _selectedAnswer
-
     private val _quizFinished = MutableStateFlow(false)
     val quizFinished: StateFlow<Boolean> = _quizFinished
-
     private val _shuffledQuestions = MutableStateFlow(AmharicContent.quizQuestions.shuffled())
     val shuffledQuestions: StateFlow<List<QuizQuestion>> = _shuffledQuestions
 
-    // Quote state
+    // Quotes
     private val _currentQuoteIndex = MutableStateFlow(0)
     val currentQuoteIndex: StateFlow<Int> = _currentQuoteIndex
 
@@ -50,112 +49,112 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     private val _showCongrats = MutableStateFlow(false)
     val showCongrats: StateFlow<Boolean> = _showCongrats
 
-    fun toggleDarkMode() {
+    // Creator submissions
+    val allSubmissions: StateFlow<List<CreatorSubmission>> = db.creatorSubmissionDao().getAll()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    val approvedSubmissions: StateFlow<List<CreatorSubmission>> = db.creatorSubmissionDao().getApproved()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    fun getMySubmissions(phone: String): Flow<List<CreatorSubmission>> =
+        db.creatorSubmissionDao().getByAuthor(phone)
+
+    // ── Prefs ──────────────────────────────────────────────────────────────────
+    fun toggleDarkMode() = viewModelScope.launch { prefs.setDarkMode(!isDarkMode.value) }
+    fun setLanguage(lang: String) = viewModelScope.launch { prefs.setLanguage(lang) }
+    fun completeOnboarding() = viewModelScope.launch { prefs.setOnboarded(true) }
+
+    // ── User Profile ───────────────────────────────────────────────────────────
+    fun saveUserProfile(name: String, phone: String, level: String, role: String) =
         viewModelScope.launch {
-            prefs.setDarkMode(!isDarkMode.value)
-        }
-    }
-
-    fun setLanguage(lang: String) {
-        viewModelScope.launch {
-            prefs.setLanguage(lang)
-        }
-    }
-
-    fun addBook(title: String, uri: String, fileType: String) {
-        viewModelScope.launch {
-            db.bookDao().insertBook(BookEntity(title = title, uri = uri, fileType = fileType))
-        }
-    }
-
-    fun deleteBook(book: BookEntity) {
-        viewModelScope.launch {
-            db.bookDao().deleteBook(book)
-        }
-    }
-
-    fun updateLastPage(bookId: Int, page: Int) {
-        viewModelScope.launch {
-            db.bookDao().updateLastPage(bookId, page)
-        }
-    }
-
-    fun getBookmarksForBook(bookId: Int): Flow<List<BookmarkEntity>> =
-        db.bookmarkDao().getBookmarksForBook(bookId)
-
-    fun addBookmark(bookId: Int, page: Int, note: String = "") {
-        viewModelScope.launch {
-            db.bookmarkDao().insertBookmark(BookmarkEntity(bookId = bookId, page = page, note = note))
-        }
-    }
-
-    fun deleteBookmark(bookmark: BookmarkEntity) {
-        viewModelScope.launch {
-            db.bookmarkDao().deleteBookmark(bookmark)
-        }
-    }
-
-    fun recordReadingToday() {
-        viewModelScope.launch {
-            val today = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
-            val current = streak.value ?: ReadingStreakEntity()
-            if (current.lastReadDate == today) return@launch
-
-            val yesterday = LocalDate.now().minusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
-            val newStreak = if (current.lastReadDate == yesterday) current.currentStreak + 1 else 1
-            val newLongest = maxOf(current.longestStreak, newStreak)
-
-            if (newStreak == 7 || newStreak % 7 == 0) {
-                _showCongrats.value = true
-            }
-
-            db.streakDao().upsertStreak(
-                current.copy(
-                    currentStreak = newStreak,
-                    lastReadDate = today,
-                    longestStreak = newLongest,
-                    totalDaysRead = current.totalDaysRead + 1
-                )
+            db.userProfileDao().upsertProfile(
+                UserProfile(name = name, phone = phone, level = level, role = role, isLoggedIn = true)
             )
+            prefs.setOnboarded(true)
         }
-    }
 
+    // ── Books ──────────────────────────────────────────────────────────────────
+    fun addBook(title: String, uri: String, fileType: String) = viewModelScope.launch {
+        db.bookDao().insertBook(BookEntity(title = title, uri = uri, fileType = fileType))
+    }
+    fun deleteBook(book: BookEntity) = viewModelScope.launch { db.bookDao().deleteBook(book) }
+    fun updateLastPage(bookId: Int, page: Int) = viewModelScope.launch { db.bookDao().updateLastPage(bookId, page) }
+    fun getBookmarksForBook(bookId: Int): Flow<List<BookmarkEntity>> = db.bookmarkDao().getBookmarksForBook(bookId)
+    fun addBookmark(bookId: Int, page: Int, note: String = "") = viewModelScope.launch {
+        db.bookmarkDao().insertBookmark(BookmarkEntity(bookId = bookId, page = page, note = note))
+    }
+    fun deleteBookmark(bookmark: BookmarkEntity) = viewModelScope.launch { db.bookmarkDao().deleteBookmark(bookmark) }
+
+    // ── Streak ─────────────────────────────────────────────────────────────────
+    fun recordReadingToday() = viewModelScope.launch {
+        val today = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
+        val current = streak.value ?: ReadingStreakEntity()
+        if (current.lastReadDate == today) return@launch
+        val yesterday = LocalDate.now().minusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
+        val newStreak = if (current.lastReadDate == yesterday) current.currentStreak + 1 else 1
+        val newLongest = maxOf(current.longestStreak, newStreak)
+        if (newStreak == 7 || newStreak % 7 == 0) _showCongrats.value = true
+        db.streakDao().upsertStreak(current.copy(
+            currentStreak = newStreak, lastReadDate = today,
+            longestStreak = newLongest, totalDaysRead = current.totalDaysRead + 1
+        ))
+    }
     fun dismissCongrats() { _showCongrats.value = false }
 
-    // Quiz functions
+    // ── Quiz ───────────────────────────────────────────────────────────────────
     fun selectAnswer(index: Int) {
         if (_selectedAnswer.value != null) return
         _selectedAnswer.value = index
-        val question = _shuffledQuestions.value[_currentQuizIndex.value]
-        if (index == question.correctIndex) {
-            _quizScore.value++
-        }
+        if (index == _shuffledQuestions.value[_currentQuizIndex.value].correctIndex) _quizScore.value++
     }
-
     fun nextQuestion() {
         val next = _currentQuizIndex.value + 1
-        if (next >= _shuffledQuestions.value.size) {
-            _quizFinished.value = true
-        } else {
-            _currentQuizIndex.value = next
-            _selectedAnswer.value = null
-        }
+        if (next >= _shuffledQuestions.value.size) _quizFinished.value = true
+        else { _currentQuizIndex.value = next; _selectedAnswer.value = null }
     }
-
     fun restartQuiz() {
         _shuffledQuestions.value = AmharicContent.quizQuestions.shuffled()
-        _currentQuizIndex.value = 0
-        _quizScore.value = 0
-        _selectedAnswer.value = null
-        _quizFinished.value = false
+        _currentQuizIndex.value = 0; _quizScore.value = 0
+        _selectedAnswer.value = null; _quizFinished.value = false
     }
 
-    fun nextQuote() {
-        _currentQuoteIndex.value = (_currentQuoteIndex.value + 1) % AmharicContent.quotes.size
-    }
+    // ── Quotes ─────────────────────────────────────────────────────────────────
+    fun nextQuote() { _currentQuoteIndex.value = (_currentQuoteIndex.value + 1) % AmharicContent.quotes.size }
+    fun prevQuote() { _currentQuoteIndex.value = (_currentQuoteIndex.value - 1 + AmharicContent.quotes.size) % AmharicContent.quotes.size }
 
-    fun prevQuote() {
-        val size = AmharicContent.quotes.size
-        _currentQuoteIndex.value = (_currentQuoteIndex.value - 1 + size) % size
-    }
+    // ── Creator ────────────────────────────────────────────────────────────────
+    fun submitWork(submission: CreatorSubmission) = viewModelScope.launch { db.creatorSubmissionDao().insert(submission) }
+    fun approveSubmission(s: CreatorSubmission) = viewModelScope.launch { db.creatorSubmissionDao().update(s.copy(status = "approved")) }
+    fun rejectSubmission(s: CreatorSubmission) = viewModelScope.launch { db.creatorSubmissionDao().update(s.copy(status = "rejected")) }
+    fun deleteSubmission(s: CreatorSubmission) = viewModelScope.launch { db.creatorSubmissionDao().delete(s) }
+    fun likeSubmission(id: Int) = viewModelScope.launch { db.creatorSubmissionDao().incrementLike(id) }
+
+    // ── Admin ──────────────────────────────────────────────────────────────────
+    fun adminLogin(password: String): Boolean = password == "@Admin1996"
+
+    val adminPoems: StateFlow<List<AdminPoem>> = db.adminPoemDao().getAll()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    val adminTerets: StateFlow<List<AdminTeret>> = db.adminTeretDao().getAll()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    val adminMisale: StateFlow<List<AdminMisale>> = db.adminMisaleDao().getAll()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    val adminQuizzes: StateFlow<List<AdminQuiz>> = db.adminQuizDao().getAll()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    val adminQuotes: StateFlow<List<AdminQuote>> = db.adminQuoteDao().getAll()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    fun insertAdminPoem(i: AdminPoem) = viewModelScope.launch { db.adminPoemDao().insert(i) }
+    fun updateAdminPoem(i: AdminPoem) = viewModelScope.launch { db.adminPoemDao().update(i) }
+    fun deleteAdminPoem(i: AdminPoem) = viewModelScope.launch { db.adminPoemDao().delete(i) }
+    fun insertAdminTeret(i: AdminTeret) = viewModelScope.launch { db.adminTeretDao().insert(i) }
+    fun updateAdminTeret(i: AdminTeret) = viewModelScope.launch { db.adminTeretDao().update(i) }
+    fun deleteAdminTeret(i: AdminTeret) = viewModelScope.launch { db.adminTeretDao().delete(i) }
+    fun insertAdminMisale(i: AdminMisale) = viewModelScope.launch { db.adminMisaleDao().insert(i) }
+    fun updateAdminMisale(i: AdminMisale) = viewModelScope.launch { db.adminMisaleDao().update(i) }
+    fun deleteAdminMisale(i: AdminMisale) = viewModelScope.launch { db.adminMisaleDao().delete(i) }
+    fun insertAdminQuiz(i: AdminQuiz) = viewModelScope.launch { db.adminQuizDao().insert(i) }
+    fun updateAdminQuiz(i: AdminQuiz) = viewModelScope.launch { db.adminQuizDao().update(i) }
+    fun deleteAdminQuiz(i: AdminQuiz) = viewModelScope.launch { db.adminQuizDao().delete(i) }
+    fun insertAdminQuote(i: AdminQuote) = viewModelScope.launch { db.adminQuoteDao().insert(i) }
+    fun updateAdminQuote(i: AdminQuote) = viewModelScope.launch { db.adminQuoteDao().update(i) }
+    fun deleteAdminQuote(i: AdminQuote) = viewModelScope.launch { db.adminQuoteDao().delete(i) }
 }

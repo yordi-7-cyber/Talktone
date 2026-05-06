@@ -86,14 +86,15 @@ fun SplashScreen(onFinished: () -> Unit) {
                 ) { it / 2 }
             ) {
                 Text(
-                    text = "የኢትዮጵያ ሥነ ጽሑፍ",
-                    style = MaterialTheme.typography.displayMedium,
+                    text = "ብዕር",
+                    style = MaterialTheme.typography.displayLarge,
                     color = EthiopianGold,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
                 )
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
             AnimatedVisibility(
                 visible = visible,
