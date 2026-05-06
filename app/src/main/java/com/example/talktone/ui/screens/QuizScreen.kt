@@ -22,9 +22,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.talktone.data.QuizQuestion
+import com.example.talktone.R
 import com.example.talktone.ui.theme.EthiopianGold
 import com.example.talktone.ui.theme.EthiopianGreen
 import com.example.talktone.ui.theme.EthiopianRed
+import com.example.talktone.ui.theme.ImageBackground
 import com.example.talktone.viewmodel.AppViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,16 +43,7 @@ fun QuizScreen(
     val selectedAnswer by viewModel.selectedAnswer.collectAsState()
     val quizFinished by viewModel.quizFinished.collectAsState()
 
-    val bgColors = if (isDark)
-        listOf(Color(0xFF1A0A2E), Color(0xFF0D1B2A))
-    else
-        listOf(Color(0xFF8B0000), Color(0xFFDC143C))
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Brush.verticalGradient(bgColors))
-    ) {
+    ImageBackground(resId = R.drawable.dark, isDark = true, overlayAlpha = 0.7f) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
                 modifier = Modifier

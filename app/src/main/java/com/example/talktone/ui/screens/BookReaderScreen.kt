@@ -24,7 +24,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.talktone.data.BookEntity
+import com.example.talktone.R
 import com.example.talktone.ui.theme.EthiopianGold
+import com.example.talktone.ui.theme.ImageBackground
 import com.example.talktone.viewmodel.AppViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -59,12 +61,8 @@ fun BookReaderScreen(
         }
     }
 
-    val bgColors = if (isDark)
-        listOf(Color(0xFF1A0A2E), Color(0xFF0D1B2A))
-    else
-        listOf(Color(0xFF00008B), Color(0xFF4169E1))
-
-    showDeleteDialog?.let { book ->
+    ImageBackground(resId = R.drawable.novel, isDark = isDark, overlayAlpha = if (isDark) 0.75f else 0.6f) {
+        showDeleteDialog?.let { book ->
         AlertDialog(
             onDismissRequest = { showDeleteDialog = null },
             containerColor = Color(0xFF1A0A2E),

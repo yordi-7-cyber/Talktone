@@ -19,7 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.talktone.data.*
+import com.example.talktone.R
 import com.example.talktone.ui.theme.EthiopianGold
+import com.example.talktone.ui.theme.ImageBackground
 import com.example.talktone.viewmodel.AppViewModel
 import androidx.compose.ui.text.style.TextAlign
 
@@ -35,7 +37,7 @@ fun AdminDashboardScreen(
     val bgColors = if (isDark) listOf(Color(0xFF1A0A2E), Color(0xFF0D1B2A))
     else listOf(Color(0xFF2D1B69), Color(0xFF4A0E8F))
 
-    Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(bgColors))) {
+    ImageBackground(resId = R.drawable.dark, isDark = true, overlayAlpha = 0.78f) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
                 modifier = Modifier.fillMaxWidth().statusBarsPadding()

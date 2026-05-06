@@ -119,7 +119,8 @@ fun LiteratureDetailScreen(
                         color = textColor,
                         lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
                     )
-                    if (language == "am" && item.contentEn.isNotEmpty()) {
+                    // Show both when language == "both" or when "am" and English exists
+                    if ((language == "both" || language == "am") && item.contentEn.isNotEmpty()) {
                         Spacer(Modifier.height(24.dp))
                         HorizontalDivider(color = textColor.copy(0.1f))
                         Spacer(Modifier.height(16.dp))

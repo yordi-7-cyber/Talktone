@@ -20,7 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.talktone.data.LiteratureCategory
 import com.example.talktone.data.LiteratureItem
+import com.example.talktone.R
 import com.example.talktone.ui.theme.EthiopianGold
+import com.example.talktone.ui.theme.ImageBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,16 +34,15 @@ fun LiteratureListScreen(
     onBack: () -> Unit,
     onItemClick: (Int) -> Unit
 ) {
-    val bgColors = if (isDark)
-        listOf(Color(0xFF1A0A2E), Color(0xFF16213E))
-    else
-        listOf(Color(0xFF4A0E8F), Color(0xFF7B2FBE))
+    val bgRes = when (category) {
+        LiteratureCategory.POEM -> R.drawable.candles
+        LiteratureCategory.TERET -> R.drawable.warm
+        LiteratureCategory.MISALE -> R.drawable.proverbs
+        LiteratureCategory.NOVEL -> R.drawable.novel
+        else -> R.drawable.reading
+    }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Brush.verticalGradient(bgColors))
-    ) {
+    ImageBackground(resId = bgRes, isDark = isDark, overlayAlpha = if (isDark) 0.75f else 0.6f) {
         Column(modifier = Modifier.fillMaxSize()) {
             // Top bar
             Row(
@@ -91,11 +92,15 @@ fun LiteratureItemCard(item: LiteratureItem, language: String, onClick: () -> Un
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = if (language == "am") item.titleAm else item.titleEn,
+                text = if (language == "am") item.titleAm else if (language == "both") item.titleAm else item.titleEn,
                 style = MaterialTheme.typography.titleLarge,
                 color = EthiopianGold,
                 fontWeight = FontWeight.Bold
             )
+            if (language == "both" && item.titleEn.isNotEmpty()) {
+                Text(text = item.titleEn, style = MaterialTheme.typography.titleSmall,
+                    color = EthiopianGold.copy(0.7f))
+            }
             if (item.author.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(

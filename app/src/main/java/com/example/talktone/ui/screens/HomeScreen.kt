@@ -26,6 +26,8 @@ import com.example.talktone.data.LiteratureCategory
 import com.example.talktone.data.ReadingStreakEntity
 import com.example.talktone.data.UserProfile
 import com.example.talktone.ui.theme.*
+import com.example.talktone.ui.theme.ImageBackground
+import com.example.talktone.R
 import com.example.talktone.viewmodel.AppViewModel
 
 data class CategoryCard(
@@ -73,14 +75,7 @@ fun HomeScreen(
     else
         listOf(Color(0xFF1A0050), Color(0xFF4A0E8F), Color(0xFF7B2FBE))
 
-    Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(bgColors))) {
-        // Animated orbs
-        Box(modifier = Modifier.size(350.dp).offset((-80).dp, (-80 + bgAnim * 40).dp)
-            .graphicsLayer { alpha = 0.12f }
-            .background(Brush.radialGradient(listOf(EthiopianGold, Color.Transparent)), CircleShape))
-        Box(modifier = Modifier.size(250.dp).align(Alignment.BottomEnd).offset(80.dp, (80 - bgAnim * 30).dp)
-            .graphicsLayer { alpha = 0.1f }
-            .background(Brush.radialGradient(listOf(EthiopianGreen, Color.Transparent)), CircleShape))
+    ImageBackground(resId = R.drawable.home, isDark = isDark, overlayAlpha = if (isDark) 0.72f else 0.55f) {
 
         Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
             // Top bar
@@ -90,15 +85,15 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
-                    Text(
-                        text = if (language == "am") "ሰላም${if (userProfile?.name?.isNotEmpty() == true) ", ${userProfile.name}" else ""} 👋"
-                               else "Hello${if (userProfile?.name?.isNotEmpty() == true) ", ${userProfile.name}" else ""} 👋",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White.copy(0.8f)
-                    )
+                    val greeting = if (userProfile?.name?.isNotEmpty() == true)
+                        "እንኳን ደህና መጡ, ${userProfile.name}! 👋"
+                    else "ሰላም 👋"
+                    Text(greeting, style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(0.9f))
+                    if (userProfile?.name?.isNotEmpty() == true) {
+                        Text("Welcome back, ${userProfile.name}!", color = Color.White.copy(0.55f), fontSize = 12.sp)
+                    }
                     Text("ብዕር", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = EthiopianGold)
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                }                Row(verticalAlignment = Alignment.CenterVertically) {
                     TextButton(onClick = { viewModel.setLanguage(if (language == "am") "en" else "am") },
                         colors = ButtonDefaults.textButtonColors(contentColor = Color.White)) {
                         Text(if (language == "am") "EN" else "አማ",

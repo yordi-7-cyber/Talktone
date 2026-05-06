@@ -22,7 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.talktone.data.BookEntity
 import com.example.talktone.data.BookmarkEntity
+import com.example.talktone.R
 import com.example.talktone.ui.theme.EthiopianGold
+import com.example.talktone.ui.theme.ImageBackground
 import com.example.talktone.viewmodel.AppViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -74,7 +76,8 @@ fun ReadBookScreen(
         listOf(Color(0xFFFFF8F0), Color(0xFFF5E6D3))
 
     val textColor = if (isDark) Color(0xFFE8DCC8) else Color(0xFF2A1A0E)
-    val surfaceColor = if (isDark) Color(0xFF1A1A2E) else Color(0xFFFFFFFF)
+
+    ImageBackground(resId = R.drawable.cozy, isDark = isDark, overlayAlpha = if (isDark) 0.88f else 0.7f) {
 
     if (showBookmarkDialog) {
         AlertDialog(

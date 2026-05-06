@@ -22,7 +22,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.talktone.R
 import com.example.talktone.ui.theme.EthiopianGold
+import com.example.talktone.ui.theme.ImageBackground
 import com.example.talktone.viewmodel.AppViewModel
 
 @Composable
@@ -36,17 +38,8 @@ fun AdminLoginScreen(
     var showPassword by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf(false) }
 
-    val bgColors = if (isDark)
-        listOf(Color(0xFF1A0A2E), Color(0xFF0D1B2A))
-    else
-        listOf(Color(0xFF2D1B69), Color(0xFF4A0E8F))
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Brush.verticalGradient(bgColors)),
-        contentAlignment = Alignment.Center
-    ) {
+    ImageBackground(resId = R.drawable.candles, isDark = true, overlayAlpha = 0.78f,
+        modifier = Modifier.fillMaxSize()) {
         IconButton(
             onClick = onBack,
             modifier = Modifier

@@ -24,7 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.talktone.data.AmharicContent
 import com.example.talktone.data.QuoteItem
+import com.example.talktone.R
 import com.example.talktone.ui.theme.EthiopianGold
+import com.example.talktone.ui.theme.ImageBackground
 import com.example.talktone.viewmodel.AppViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,10 +39,7 @@ fun QuotesScreen(
 ) {
     val currentIndex by viewModel.currentQuoteIndex.collectAsState()
     val quotes = AmharicContent.quotes
-    val quote = quotes[currentIndex]
     val context = LocalContext.current
-
-    val bgColors = quote.backgroundGradient.map { Color(it) }
 
     AnimatedContent(
         targetState = currentIndex,
@@ -51,11 +50,7 @@ fun QuotesScreen(
         label = "quote_transition"
     ) { idx ->
         val q = quotes[idx]
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Brush.radialGradient(q.backgroundGradient.map { Color(it) }))
-        ) {
+        ImageBackground(resId = R.drawable.dark, isDark = true, overlayAlpha = 0.65f) {
             // Decorative elements
             repeat(3) { i ->
                 Box(
