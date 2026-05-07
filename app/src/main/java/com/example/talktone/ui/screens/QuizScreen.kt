@@ -37,7 +37,7 @@ fun QuizScreen(
     isDark: Boolean,
     onBack: () -> Unit
 ) {
-    val questions by viewModel.shuffledQuestions.collectAsState()
+    val questions by viewModel.allQuizQuestions.collectAsState()
     val currentIndex by viewModel.currentQuizIndex.collectAsState()
     val score by viewModel.quizScore.collectAsState()
     val selectedAnswer by viewModel.selectedAnswer.collectAsState()

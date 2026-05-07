@@ -27,9 +27,11 @@ data class BookmarkEntity(
 data class ReadingStreakEntity(
     @PrimaryKey val id: Int = 1,
     val currentStreak: Int = 0,
-    val lastReadDate: String = "",
+    val lastReadDate: String = "",   // yyyy-MM-dd of last counted day
     val longestStreak: Int = 0,
-    val totalDaysRead: Int = 0
+    val totalDaysRead: Int = 0,
+    val todayMinutes: Int = 0,       // minutes used today
+    val sessionStart: Long = 0L      // timestamp when session started
 )
 
 @Entity(tableName = "user_profile")
@@ -37,8 +39,10 @@ data class UserProfile(
     @PrimaryKey val id: Int = 1,
     val name: String = "",
     val phone: String = "",
-    val level: String = "beginner", // beginner, intermediate, advanced
-    val role: String = "reader",    // reader, creator
+    val level: String = "beginner",
+    val role: String = "reader",
+    val language: String = "am",     // "am" or "both"
+    val profilePicUri: String = "",
     val isLoggedIn: Boolean = false,
     val createdAt: Long = System.currentTimeMillis()
 )
@@ -48,12 +52,12 @@ data class CreatorSubmission(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val authorName: String,
     val authorPhone: String,
-    val category: String, // poem, teret, misale, novel
+    val category: String,
     val titleAm: String,
     val titleEn: String = "",
     val contentAm: String,
     val contentEn: String = "",
-    val status: String = "pending", // pending, approved, rejected
+    val status: String = "pending",
     val likes: Int = 0,
     val submittedAt: Long = System.currentTimeMillis()
 )

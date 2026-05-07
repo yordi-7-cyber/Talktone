@@ -191,10 +191,13 @@ private fun AdminTextField(label: String, value: String, maxLines: Int = 1, onCh
         label = { Text(label, color = Color.White.copy(alpha = 0.6f)) },
         maxLines = maxLines,
         modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = Color.White, unfocusedTextColor = Color.White,
-            focusedBorderColor = EthiopianGold, unfocusedBorderColor = Color.White.copy(alpha = 0.3f),
-            cursorColor = EthiopianGold
+            focusedBorderColor = EthiopianGold, unfocusedBorderColor = EthiopianGold.copy(alpha = 0.4f),
+            cursorColor = EthiopianGold,
+            focusedContainerColor = Color.Black.copy(alpha = 0.4f),
+            unfocusedContainerColor = Color.Black.copy(alpha = 0.3f)
         )
     )
 }

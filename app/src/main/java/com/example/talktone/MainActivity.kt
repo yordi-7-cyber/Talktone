@@ -113,7 +113,8 @@ fun AppNavHost(
                 category = com.example.talktone.data.LiteratureCategory.POEM,
                 language = language, isDark = isDark,
                 onBack = { navController.popBackStack() },
-                onItemClick = { id -> navController.navigate(Screen.PoemDetail.createRoute(id)) }
+                onItemClick = { id -> navController.navigate(Screen.PoemDetail.createRoute(id)) },
+                viewModel = viewModel
             )
         }
 
@@ -132,7 +133,8 @@ fun AppNavHost(
                 category = com.example.talktone.data.LiteratureCategory.TERET,
                 language = language, isDark = isDark,
                 onBack = { navController.popBackStack() },
-                onItemClick = { id -> navController.navigate(Screen.TeretDetail.createRoute(id)) }
+                onItemClick = { id -> navController.navigate(Screen.TeretDetail.createRoute(id)) },
+                viewModel = viewModel
             )
         }
 
@@ -151,7 +153,8 @@ fun AppNavHost(
                 category = com.example.talktone.data.LiteratureCategory.MISALE,
                 language = language, isDark = isDark,
                 onBack = { navController.popBackStack() },
-                onItemClick = { id -> navController.navigate(Screen.MisaleDetail.createRoute(id)) }
+                onItemClick = { id -> navController.navigate(Screen.MisaleDetail.createRoute(id)) },
+                viewModel = viewModel
             )
         }
 
@@ -229,6 +232,11 @@ fun AppNavHost(
 
         composable(Screen.CommunityFeed.route) {
             CommunityFeedScreen(viewModel = viewModel, isDark = isDark, language = language,
+                onBack = { navController.popBackStack() })
+        }
+
+        composable(Screen.WordPuzzle.route) {
+            WordPuzzleScreen(viewModel = viewModel, language = language,
                 onBack = { navController.popBackStack() })
         }
 

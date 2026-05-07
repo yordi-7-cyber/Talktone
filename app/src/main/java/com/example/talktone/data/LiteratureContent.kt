@@ -95,7 +95,15 @@ object AmharicContent {
     )
 
     val poems = listOf(
-        LiteratureItem(1,"ኢትዮጵያ","Ethiopia",
+        LiteratureItem(1,"ክራር እና ፍቅር","Sorrow and Love",
+            "ትግስት በሌላት በጨከነች ሌሊት\nወዳጅ ለወዳጁ ደብዳቤ ፃፈላት\n\nከጥቁር ሰማይ ላይ ሦስት ኮከቦች አየለጥቂት\nቅፅበታት ከከዋክብቱ ላይ ሀሳቡን አቆየ\n\nአንደኛዋ ኮከብ እጅግ የደመቀ ብርሃን ትረጫለች\nሁለተኛዋ ግን ደመቅ ትላለች ካንዷ ትሻላለች\nሦስተኛዋ ደሞ እርሱን ትመስላለች\n\nበሁለቱ መካከል ፈዛ ትታያለች\nእርሱን ለምትመስለው ብዕሩን አነሳ\nሁለቱን ከዋክብት ልቡን አወረሳ",
+            "A beautiful love poem by Efrem Seyoum about longing, stars, and eternal love written under the night sky.",
+            "ኤፍሬም ስዩም", LiteratureCategory.POEM),
+        LiteratureItem(2,"የተጣለ ፈረስ","The Abandoned Horse",
+            "ዘመኑ ያለፈ ጋማው የረገፈ\nየጎድን አጥንቱ ማበጠርያ መሳይ\nጠዋት ህያው ፍጡር\nሌሊት የጅብ ሲሳይ\n\nከተማው መግቢያ ላይ\nአቧራ የሚቅም\nየተጣለ ፈረስ\nአጋጥሞህ አያውቅም?",
+            "A powerful poem about an abandoned horse, symbolizing those forgotten by society despite their past service.",
+            "በእውቀቱ ስዩም", LiteratureCategory.POEM),
+        LiteratureItem(3,"ኢትዮጵያ","Ethiopia",
             "ኢትዮጵያ ሆይ ደስ ይበልሽ\nልጆችሽ ሁሉ ይወዱሽ\nታሪክሽ ታላቅ ነው\nክብርሽ ዘላለም ይኑር\n\nጥቁር ምድር ቅዱስ ሀገር\nሰማዩ ሰማያዊ ነው\nሸለቆሽ አረንጓዴ ነው\nፍቅርሽ ዘላለም ይኑር",
             "O Ethiopia, rejoice\nAll your children love you\nYour history is great\nMay your glory last forever\n\nBlack land, holy country\nYour sky is blue\nYour valleys are green\nMay your love last forever",
             "ሕዝባዊ", LiteratureCategory.POEM),
@@ -118,7 +126,15 @@ object AmharicContent {
     )
 
     val terets = listOf(
-        LiteratureItem(10,"አንበሳና አይጥ","The Lion and the Mouse",
+        LiteratureItem(10,"ኮከብን መያዝ","Catching a Star",
+            "በአንድ ወቅት በአንድ ጊዜ ውብ በሆነ ወንዝ አጠገብ በሚገኝ ትንሽ ቤት ውስጥ ሊሊና ወላጆቿ ይኖሩ ነበር።\n\nበየምሽቱ ሊሊና አባቷ ወንዙ ዳር ተቀምጠው አከባቢውንና ከዋክብትን የማድነቅ ልምድ አላቸው።\n\nአንድ ቀን ምሽት እንደሁልግዜው ወንዙ ዳር ተቀምጠው ተፈጥሮን እያደንቁ እያለ ሊሊ \"አባዬ እንዴት ኮከብ መያዝ እችላለሁ?\" ብላ ጠየቀችው።\n\nአባቷ ፈገግ እያለ \"ሊሊዬ ኮከቦች በጣም ከፍ ይላሉ ስለዚህ በፍጹም ልንይዛቸው አንችልም። ምናልባት በህልማችን ልንይዛቸው እንችል ይሆናል።\" አላት።\n\nአንድ ምሽት ግን ሊሊ ለመሞከር ወሰነች። ወደ ወንዙ ወጥታ ኮከቦችን በትኩረት አየቻቸው። ከፍ ወዳለ ጉብታ ላይም ወጣች።\n\nከዋክብት ግን ሩቅ ነበሩ። ሊሊ ከዋክብቱን መያዝ ባለመቻላች አዝና ወደ አባቷ ሄደች።\n\nአባቷ ሲያያት አይኖቿ በእንባ ተሞልተዋል። አባቷ ሀዘኗን ለማጥፋት እጇን ይዞ ወደ ወንዙ ወሰዳት።\n\nከጨረቃ ብርሃን ስር የሚያንፀባርቀውን ወንዝ እየጠቆመ \"ሊሊ ከዋክብት በውሃ ውስጥ ተንፀባርቀዋል። እነሱን ለመንካት ቅርብና ቀላል ነው።\" አለ።\n\nሊሊ አየች እና እዚያው ወንዙ ላይ የሚያብረቀርቁ የከዋክብት ነፀብራቅ ነበሩ። እሷም ወደ ወንዙ ቀረብ ብላ ውሃውን ዳሰሰች።\n\nእጆቿን የውሃው ቅዝቃዜ ተሰማት። ትክክለኛው ኮከብ አልነበረም ግን በቂ ነበር።\n\nአባቷም \"እይ ሊሊ አንዳንድ ጊዜ በጣም የምንወዳቸው ነገሮች እኛ እንደምንይዛቸው ሆነው ቅርብ ናቸው። እና አንዳንድ ጊዜ ደሞ ልንይዛቸው የምንችላቸው አይደሉም።\" አለ።\n\nሊሊ አባቷ ያላትን በደንብ ተረድታለች። አባቷን እቅፍ አደረገች ልቧም በደስታ ተሞልቶ ነበር።\n\nየወላጆቿ ፍቅር እና የሌሊት ሰማይ ውበት በቂ መሆኑን ተገነዘበች።\n\n\"አስማተኛ እንደሆንኩ እንዲሰማኝ ኮከብ መያዝ ማሰብ አልነበረኝም የማይሆን ነው።\" አለች።\n\nትምህርቱ፡ የማይቻልን ለመያዝ መጣር ሳያስፈልግ የምንችለውን ማድረግ ይኖርብናል።",
+            "Once upon a time, Lili and her parents lived in a small house by a beautiful river. Every evening, Lili and her father would sit by the riverbank admiring the stars. One evening, Lili asked her father \"How can I catch a star?\" Her father smiled and said \"Stars are very high, so we can never catch them. But perhaps in our dreams, we might catch them.\" One night, Lili decided to try. She went to the river and looked at the stars. She climbed a high hill, but the stars were still far away. Sad that she couldn't catch the stars, she went to her father. Her father saw her teary eyes and took her to the river. Under the moonlight, he showed her the stars reflected in the water. \"Look Lili, the stars are reflected in the water. They are close and easy to touch.\" Lili saw the shimmering star reflections and touched the water. Her hands felt the cold water. It wasn't a real star, but it was enough. Her father said \"You see Lili, sometimes the things we love most are closer than we think, even if we can't hold them.\" Lili understood her father well. She hugged her father and her heart was filled with joy. She realized that her parents' love and the beauty of the night sky were enough.\n\nLesson: We should focus on what we can do instead of chasing the impossible.",
+            "ሕዝባዊ ተረት", LiteratureCategory.TERET),
+        LiteratureItem(11,"ንግሥት ማክዳና የጥበብ ፍለጋ","Queen Makeda and the Quest for Wisdom",
+            "ከብዙ ሺህ ዓመታት በፊት በኢትዮጵያ ምድር ንግሥት ማክዳ (የሳባ ንግሥት) የምትባል ብልህና ቆንጆ ንግሥት ነበረች። ንግሥት ማክዳ ሀገሯን በፍትህ የምታስተዳድር ቢሆንም፣ ሁልጊዜም ለዕውቀትና ለጥበብ ትልቅ ጥማት ነበራት።\n\nበዚያ ዘመን በእስራኤል ሀገር ንጉሥ ሰለሞን የተባለ እጅግ ጥበበኛ ንጉሥ እንዳለ ወሬው ደረሳት። ንግሥቲቱም \"በዓይን አይቼ ካላረጋገጥኩ አላምንም\" በማለት፣ ብዙ ወርቅና ሽቶዎችን ጭና ረጅሙን መንገድ ተጉዛ ኢየሩሳሌም ደረሰች።\n\nንግሥት ማክዳ የንጉሡን ጥበብ ለመፈተን ብዙ የሚከብዱ ጥያቄዎችን አዘጋጅታ ነበር።\n\nከፈተናዎቹ አንዱ እንዲህ ነበር፦\n\nየሰው ሰራሽና የተፈጥሮ አበባዎች ፈተና\nንግሥቲቱ ሁለት እኩል የሚያምሩ የአበባ ዘንጎችን አቀረበች። አንደኛው ከወርቅና ከሐር የተሰራ ሰው ሰራሽ አበባ ሲሆን፣ ሁለተኛው ደግሞ እውነተኛ የተፈጥሮ አበባ ነበር። ሁለቱም አንድ አይነት ስለሚመስሉ በዓይን መለየት አይቻልም ነበር።\n\nንጉሡን \"ሳይነኩት የትኛው እውነተኛ አበባ እንደሆነ ንገረኝ\" አለችው።\n\nንጉሥ ሰለሞንም ፈገግ አለና መስኮቱ እንዲከፈት አዘዘ። ብዙም ሳይቆይ ንቦች ወደ ክፍሉ ገብተው በአንዱ አበባ ላይ ብቻ አረፉ።\n\nንጉሡም \"ንቦች ያረፉበት እውነተኛው አበባ ነው\" ብሎ መለሰላት። ንግሥቲቱም በጥበቡ ተገረመች።\n\nትምህርቱ፡ ዕውቀትና ጥበብ ከወርቅና ከብር በላይ ዋጋ አላቸው። ለጥያቄዎችህ መልስ ለማግኘት ጥረትና ጉዞ ማድረግ አስፈላጊ ነው።",
+            "Thousands of years ago, Queen Makeda (the Queen of Sheba) ruled Ethiopia. She was wise and beautiful. Though she ruled her country with justice, she always had a great thirst for knowledge and wisdom. When she heard about King Solomon in Israel, who was extremely wise, she said \"I won't believe until I see with my own eyes.\" She loaded many gold and gifts and traveled the long journey to Jerusalem.\n\nQueen Makeda prepared difficult questions to test the king's wisdom. One of her challenges was this: She presented two flower stems that looked equally beautiful. One was an artificial flower made of gold and silk, the other was a real natural flower. They looked so similar that it was impossible to tell them apart by eye. She asked the king \"Without touching them, tell me which is the real flower.\"\n\nKing Solomon smiled and ordered the window to be opened. Soon, bees flew into the room and landed on only one of the flowers. The king said \"The one the bees land on is the real flower.\" The queen was amazed by his wisdom.\n\nLesson: Knowledge and wisdom are more valuable than gold and silver. Making effort and traveling to find answers to your questions is important.",
+            "ሕዝባዊ ተረት", LiteratureCategory.TERET),
+        LiteratureItem(12,"አንበሳና አይጥ","The Lion and the Mouse",
             "ከዘመናት በፊት አንድ ታላቅ አንበሳ በጫካ ውስጥ ይኖር ነበር። አንድ ቀን ትንሽ አይጥ ሲጫወት አንበሳው ላይ ወደቀ። አንበሳው ተናደደ።\n\n\"ትንሽ አይጥ! ልበላህ!\" አለ አንበሳው።\n\n\"እባክህ ይቅር በለኝ!\" አለ አይጡ። \"አንድ ቀን ልረዳህ እችላለሁ።\"\n\nአንበሳው ሳቀ። ግን ይቅር አለው። ከጥቂት ቀናት በኋላ አንበሳው በአዳኞች ወጥመድ ተያዘ። አይጡ ሰምቶ ሮጠ። ገመዱን ቆረጠ። አንበሳው ነፃ ወጣ።\n\nትምህርቱ፡ ትንሽ ቢሆን ደግነት ትልቅ ዋጋ አለው።",
             "Long ago, a great lion lived in the forest. One day, a small mouse fell on the lion while playing. The lion was angry.\n\n\"Little mouse! I will eat you!\"\n\n\"Please forgive me! One day I can help you.\"\n\nThe lion laughed but let it go. Days later the lion was caught in a trap. The mouse chewed through the rope and freed him.\n\nLesson: Even small acts of kindness have great value.",
             "ሕዝባዊ ተረት", LiteratureCategory.TERET),
@@ -140,7 +156,20 @@ object AmharicContent {
         LiteratureItem(24,"ፍቅር ሁሉን ያሸንፋል","Love Conquers All","ፍቅር ሁሉን ያሸንፋል — ጦርነትም ቢሆን።","Love conquers all — even war.","ሕዝባዊ",LiteratureCategory.MISALE),
         LiteratureItem(25,"ዝምታ ወርቅ ነው","Silence is Gold","ዝምታ ወርቅ ነው — ቃል ብር ነው።","Silence is gold — words are silver.","ሕዝባዊ",LiteratureCategory.MISALE),
         LiteratureItem(26,"ጤና ሀብት ነው","Health is Wealth","ጤና ሀብት ነው — ሀብት ጤና አይደለም።","Health is wealth — wealth is not health.","ሕዝባዊ",LiteratureCategory.MISALE),
-        LiteratureItem(27,"ትዕግስት ፍሬ ያፈራል","Patience Bears Fruit","ትዕግስት ፍሬ ያፈራል — ቸኩሎ ሲሄድ ይወድቃል።","Patience bears fruit — the hasty one falls.","ሕዝባዊ",LiteratureCategory.MISALE)
+        LiteratureItem(27,"ትዕግስት ፍሬ ያፈራል","Patience Bears Fruit","ትዕግስት ፍሬ ያፈራል — ቸኩሎ ሲሄድ ይወድቃል።","Patience bears fruit — the hasty one falls.","ሕዝባዊ",LiteratureCategory.MISALE),
+        LiteratureItem(28,"ሀብት የማይቀረው ሰው የለም","No One Who Doesn't Lack","ሀብት የማይቀረው ሰው የለም — ሁሉም የሚያጣው ነገር አለው።","There is no one who doesn't lack something — everyone has something they miss.","ሕዝባዊ",LiteratureCategory.MISALE),
+        LiteratureItem(29,"የሌሊት ህልም ቀን ይሆናል","Night Dream Becomes Day","የሌሊት ህልም ቀን ይሆናል — ከጥረት ጋር።","A night dream becomes day — with effort.","ሕዝባዊ",LiteratureCategory.MISALE),
+        LiteratureItem(30,"ጓደኛ እራት ያውቃል","A Friend Knows Dinner","ጓደኛ እራት ያውቃል — ግን ጠጁን አያውቅም።","A friend knows dinner — but doesn't know the cost.","ሕዝባዊ",LiteratureCategory.MISALE),
+        LiteratureItem(31,"አይጥ በደመና ላይ ወጥቶ ድብን ይዞ ይዞራል","Mouse on Cloud","አይጥ በደመና ላይ ወጥቶ ድብን ይዞ ይዞራል — ድርቅ ባለ ጊዜ።","A mouse on a cloud taking a bear around — during drought.","ሕዝባዊ",LiteratureCategory.MISALE),
+        LiteratureItem(32,"እንጀራ መብላት ቀላል ነው","Eating Injera is Easy","እንጀራ መብላት ቀላል ነው — ማብሰል ግን ከባድ።","Eating injera is easy — but cooking it is hard.","ሕዝባዊ",LiteratureCategory.MISALE),
+        LiteratureItem(33,"አምላክ ይኖራል ምግብ ይሰጣል","God Exists He Gives Food","አምላክ ይኖራል ምግብ ይሰጣል — ለሚሰራ።","God exists, He gives food — to those who work.","ሕዝባዊ",LiteratureCategory.MISALE),
+        LiteratureItem(34,"የተፈረሰ ቤት ይከራቸዋል","A Collapsed House is Haunted","የተፈረሰ ቤት ይከራቸዋል — እውቀት ያለው ሰው ይጠብቃል።","A collapsed house is haunted — a knowledgeable person guards it.","ሕዝባዊ",LiteratureCategory.MISALE),
+        LiteratureItem(35,"ጥሩ ስም ከሀብት ይሻላል","Good Name Better Than Wealth","ጥሩ ስም ከሀብት ይሻላል — የሚጠፋው አይደለም።","A good name is better than wealth — it doesn't perish.","ሕዝባዊ",LiteratureCategory.MISALE),
+        LiteratureItem(36,"የሚሻውን ያገኛል","One Who Seeks Finds","የሚሻውን ያገኛል — ጥረት ያስፈራል።","One who seeks finds — effort bears fruit.","ሕዝባዊ",LiteratureCategory.MISALE),
+        LiteratureItem(37,"ልብህን ለወዳጅህ ስጥ","Give Your Heart to Your Friend","ልብህን ለወዳጅህ ስጥ — ግን አትስጠው።","Give your heart to your friend — but don't give it away.","ሕዝባዊ",LiteratureCategory.MISALE),
+        LiteratureItem(38,"ወንዝ ዳር የለው ጉድጓድ ውስጥ ይሞታል","River Without Bank Dies in Hole","ወንዝ ዳር የለው ጉድጓድ ውስጥ ይሞታል — ድንበር ያስፈልጋል።","A river without banks dies in a hole — boundaries are needed.","ሕዝባዊ",LiteratureCategory.MISALE),
+        LiteratureItem(39,"አንድ እጅ ድምፅ አያወጣም","One Hand Makes No Sound","አንድ እጅ ድምፅ አያወጣም — ሁለት እጅ ድምፅ ያወጣል።","One hand makes no sound — two hands make sound.","ሕዝባዊ",LiteratureCategory.MISALE),
+        LiteratureItem(40,"ልጅ ሳይማር ያድጋል","A Child Grows Without Learning","ልጅ ሳይማር ያድጋል — ግን ሳይማር አይረዳም።","A child grows without learning — but without learning, they don't understand.","ሕዝባዊ",LiteratureCategory.MISALE)
     )
 
     val novels = listOf(

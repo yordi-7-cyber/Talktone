@@ -38,7 +38,7 @@ fun QuotesScreen(
     onBack: () -> Unit
 ) {
     val currentIndex by viewModel.currentQuoteIndex.collectAsState()
-    val quotes = AmharicContent.quotes
+    val quotes by viewModel.allQuotes.collectAsState()
     val context = LocalContext.current
 
     AnimatedContent(
